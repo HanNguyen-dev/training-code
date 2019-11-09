@@ -22,7 +22,7 @@ Installing Docker, MSSQL Server with AdventureWorks for Windows 10 Home
     2. Run "vagrant ssh-config"
     3. Record your IP address and port number
         1. This is abit different from Fred's instruction. Fred used VirtualBox to add a new port number in the Network Setting, this instruction is going to use commandlines instead for docker.
-        2. My IP Address is 127.0.0.1 with port 2222.
+        2. Example: IP Address is 127.0.0.1 with port 2222.
         3. Run the next commandline (step 4 below) with your IP Address and port number.  The flag "-p" specify the port number.
     4. Run "ssh -p 2222 -i .vagrant/machines/master/virtualbox/private_key vagrant@127.0.0.1"
     5. Answer "yes" to the prompt.
@@ -30,7 +30,7 @@ Installing Docker, MSSQL Server with AdventureWorks for Windows 10 Home
     7. Run "eval $(ssh-agent)" 
     8. Run "ssh-add -k .vagrant/machines/master/virtualbox/private_key"
 7. With your IP Address and port number (This step check if docker is running and accessible)
-    1. My IP Address is 127.0.0.1 and port number 2222, which will be written as 127.0.0.1:2222 in the commandline below.
+    1. Example: IP Address is 127.0.0.1 and port number 2222, which will be written as 127.0.0.1:2222 in the commandline below.
     2. Run "docker --host ssh://vagrant@127.0.0.1:2222 info"
     3. There should be an error-free printout.
 8. Run "echo 'export DOCKER_HOST=ssh://vagrant@127.0.0.1:2222' >> ~/.zshenv", with your IP and Port.
@@ -46,7 +46,7 @@ Installing MSSQL and Downloading AdventureWorks2017
 6. Run "wget https://raw.githubusercontent.com/1910-oct21-dotnet/training-code/master/1_sql/restore.sql", (from training-code github)
 7. Run "docker image build -t sqlserver ."
 8. Run "docker container ls"
-    1. Get the first 3 letters of the Container ID Name.  Mine is edfe88f00c58, so only "edf" is necessary.
+    1. Get the first 3 letters of the Container ID Name.  Example is edfe88f00c58, so only "edf" is necessary.
     2. Run "docker container stop edf", "edf" is from the previous step.
 10. Run "docker container run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12345' -p 1433:1433 --rm -d sqlserver"
 
