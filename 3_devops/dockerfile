@@ -1,0 +1,25 @@
+# Create the environment,
+# which is dotnet?
+FROM mcr.microsoft.com/dotnet/core/sdk as build
+WORKDIR /aspnet
+# EXPOSE 3000-3001
+EXPOSE 5000
+COPY . .
+# ./3_Devops /aspnet
+RUN dotnet build
+RUN dotnet publish --no-restore -c Release -o dist
+# 3 ways to run a command line command 1) RUN - only execute in the env 2) COMMAND - from the call from the outside 3) ENTRYPOINT execute against the outside env,
+#RUN dotnet run --project Devops.Client/Devops.Client.csproj
+#ENV ASPNETCORE_URLS=http://*:5000
+
+# CMD ["dotnet", "run", "--project", "Devops.Client/Devops.Client.csproj"]
+#CMD ["dotnet", "dist/Devops.Client.dll"]
+
+# for only asp.net without the
+FROM mcr.microsoft.com/dotnet/core/aspnet
+WORKDIR /dist
+# COPY --from=build /aspnet/dist /dist
+COPY --from=build /aspnet/dist .
+RUN ls -a
+#ENV ASPNETCORE_URLS=http://*:5000
+CMD ["dotnet", "Devops.Client.dll"]
