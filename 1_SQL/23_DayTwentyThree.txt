@@ -1,0 +1,58 @@
+Node is customizable, and no convention.
+
+node i -D http-server
+D is for save for development dependencies purpose
+P is for save for application dependencies (project), the default
+
+Two dependencies in node
+1) development dependencies 
+1) (regular) dependencies
+
+No standard above port 4000.
+
+Dotnet -- convention.
+
+CSS 
+Preprocessing -- write pseudo CSS that will transpile into CSS.  Transpile - translate one high-level language to another high-level language (usually on the same level).
+	CSS Domain specific language thus, preprocessing is best?
+	Tools -- less, sass
+	
+Postprocessing -- 
+vendor prefix (the browser) -- rule that is applied by the standard css that is not supported by a Browser, but the browser will convert it into its only language.
+
+Browser War (current) -- standard and performance
+
+Internal CSS -- mainly used by Email
+
+A rule of CSS
+* key value pair
+
+Reset CSS
+* the basic element of the box model, to override the setting of the browsers, etc.
+
+Normalized CSS
+
+Internal CSS will override External CSS.
+
+Column-Structure aka Grid-Structure
+
+13 points on the screen for the columns
+12-column grid system
+* divisible by 1, 2, 3, 4, 6 for the golden ratio
+* gutter are the spacings
+
+* columns are the gride
+* column design such as 3-column design
+
+z-axis --> -9,999 - 9,999
+
+
+static
+relative
+absolute
+fixed -- always absolute to the screen even if its parent is relative.
+sticky -- fixed relatively.  Stick the a parent, but disappear after its parent is gone for after the view of the screen.
+
+pica -- for banner, x times of pt
+em -- the width of m in numbers of pixels
+rem -- the root element only, parent 2em, 3rem is blank times something

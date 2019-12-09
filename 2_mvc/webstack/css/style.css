@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+
+}
+
+body {
+  color:blue;
+}
+
+.box-sizing : border-box {
+
+}
+
+/* .clear::after {
+
+}
+
+.box::after {
+
+} */
+
+.col-1 {
+  width: 8.333px;
+}
+
+.col-11 {
+  width: 8.333px;
+}
+
+.col-12 {
+  width: 100%;
+}

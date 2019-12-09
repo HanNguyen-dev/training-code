@@ -1,0 +1,4 @@
+USE master;
+go
+
+restore database AdventureWorks2019 from disk = '/home/han/Downloads/AdventureWorks2017.bak';

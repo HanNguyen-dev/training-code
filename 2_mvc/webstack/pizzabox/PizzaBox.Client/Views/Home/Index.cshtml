@@ -1,0 +1,40 @@
+﻿@model PizzaBox.Client.Models.Pizza
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <!-- <h1 class="display-4">Welcome</h1> -->
+    <h1 class="display-4">Dotnet Rocks</h1>
+    <h1 class="display-4">@ViewBag.Name</h1>
+    <h1 class="display-4">@ViewData["Name"]</h1>
+    <h1 class="display-4">@TempData["Name"]</h1>
+    @if (ViewBag.Pizza != null)
+    {
+      <h1 class="display-4">@ViewData.Pizza.Crust</h1>
+      <h1 class="display-4">@ViewData.Pizza.Size</h1>
+    }
+    <!-- <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> -->
+</div>
+
+
+<form action="/home/order" method="post">
+  @foreach(var c in Model.Crusts)
+  {
+    <!-- <input type="radio" name="crust" value="@c" /> -->
+    <input type="radio" name="crust" value="@c" />
+    <label>@c</label>
+  }
+
+  @foreach(var c in Model.Sizes)
+  {
+    <!-- <input type="radio" name="size" value="@c" /> -->
+    <input type="radio" name="size" value="@c" />
+    <label>@c</label>
+  }
+
+  <input type"submit" value="order">
+
+</form>
