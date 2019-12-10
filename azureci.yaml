@@ -1,16 +1,14 @@
+name: $(date:yyyymmdd)$(rev:.rr) #20191209.00
 
----
-  name: "$(date:yyyymmdd)$(rev:.rr)"
-  stages:
-    -
-      jobs:
-        -
-          job: aspnet
-          pool:
-            vmImage: ubuntu-18.04
-          steps:
-            -
-              script: "dotnet build 3_devops/Devops.sln"
-      stage: compile
-  trigger:
-    - master
+trigger:
+  - master
+
+stages:
+  - stage: compile
+    jobs:
+      - job: aspnet
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: |
+              dotnet build 3_devops/Devops.sln
