@@ -6,16 +6,19 @@ trigger:
 stages:
   - stage: compile
     jobs:
-      - job: aspnet
+      - job: aspnet_build
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: |
-              dotnet build 3_devops/Devops.sln
+          - script: dotnet build 3_devops/Devops.sln
   - stage: test
     jobs:
       - job: aspnet_test
         pool:
           vmImage: ubuntu-18.04
         steps:
-        - script: dotnet test 3_devops/Devops.sln --collect:"XPlat Code Coverage"
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: test
+              projects: 3_devops/Devops.sln
+              arguments: --collect:"XPlat Code Coverage"
