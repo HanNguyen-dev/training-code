@@ -1,20 +1,16 @@
-name: $(data:yyyymmdd)$(rev:.rr) #20191209.10 rev mean auto-increment
 
-trigger:
-  - master                       # will built when push to master
-
-stages:
-  - stage: compile
-    jobs:
-      - job: aspnet
-      - pool:                     # the server where the job on
-        vmImage: ubuntu-18.04
-      steps:
-        - script: |
-            dotnet build 3_devops/Devops.sln
-
-  # - stage: test
-  # - stage: pack
-  # - stage: deploy
-
-
+---
+  name: "$(date:yyyymmdd)$(rev:.rr)"
+  stages:
+    -
+      jobs:
+        -
+          job: aspnet
+          pool:
+            vmImage: ubuntu-18.04
+          steps:
+            -
+              script: "dotnet build 3_devops/Devops.sln"
+      stage: compile
+  trigger:
+    - master
