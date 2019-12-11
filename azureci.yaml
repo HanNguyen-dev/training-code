@@ -1,4 +1,4 @@
-name: $(date:yyyymmdd)$(rev:.rr) #20191209.00
+name: $(date:yyyyMMdd)$(rev:.rr) #20191209.00
 
 trigger:
   - master
@@ -19,3 +19,30 @@ stages:
         vmImage: ubuntu-18.04
       steps:
         - script: dotnet test 3_devops/Devops.sln --collect:"XPlat Code Coverage"
+
+      - task: PublishCodeCoverageResult@1
+        inputs:
+          codeCoverageTool: cobertura
+          summaryFileLocation: ./3_devops/Devops.Test/TestResults/coverage.cobertura.xml
+
+  - stage: analyze
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: dotnet install --global dotnet-sonarscanner
+          - script: |
+              sonarscanner begin /k:devops-training /d:sonar-login=$(SONAR_LOGIN)
+              dotnet build
+              dotnet test
+              sonarscanner end /d:sonar-login=$(SONAR_LOGIN)
+  - stage: pack
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: docker image build -f 3_devops/dockerfile -t hannguyendev/devops:$(BUILD_NAME)
+          - script: docker login -username $(DOCKER_USER) --password $(DOCKER_TOKEN)
+          - script: docker push hannguyendev/devops:$(BUILD_NAME)
