@@ -40,10 +40,11 @@ stages:
               /d:sonar.cs.opencover.reportsPaths=**/TestResults/*/coverage.opencover.xml \
               /d:sonar.cs.vstest.reportsPaths=**/*.trx \
               /k:hannguyen-dev \
-              /o:HanNguyen-dev
+              /o:hannguyen-dev
               dotnet build 3_devops/Devops.sln
               dotnet test 3_devops/Devops.sln --logger trx
               dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+            displayName: dotnet sonar end
             env:
               SONAR_TOKEN: $(sonar.login)
   - stage: pack
