@@ -45,7 +45,7 @@ stages:
               dotnet test 3_devops/Devops.sln --logger trx
               dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
             env:
-              SONAR_TOKEN: $(SONAR_LOGIN)
+              SONAR_TOKEN: $(sonar.login)
   - stage: pack
     jobs:
       - job:
