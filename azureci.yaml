@@ -6,43 +6,53 @@ trigger:
 stages:
   - stage: compile
     jobs:
-      - job: aspnet
+      - job: aspnet_build
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: |
-              dotnet build 3_devops/Devops.sln
+          - script: dotnet build 3_devops/Devops.sln
   - stage: test
     jobs:
-      - job: aspnet-test
+      - job: aspnet_test
         pool:
-        vmImage: ubuntu-18.04
-      steps:
-        - script: dotnet test 3_devops/Devops.sln --collect:"XPlat Code Coverage"
-
-      - task: PublishCodeCoverageResult@1
-        inputs:
-          codeCoverageTool: cobertura
-          summaryFileLocation: ./3_devops/Devops.Test/TestResults/coverage.cobertura.xml
-
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: test
+              projects: 3_devops/Devops.sln
+              arguments: '--collect:"XPlat Code Coverage"'
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              codeCoverageTool: cobertura
+              summaryFileLocation: '**/TestResults/coverage.cobertura.xml'
   - stage: analyze
     jobs:
       - job:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: dotnet install --global dotnet-sonarscanner
+          - script: dotnet tool install --global dotnet-sonarscanner
           - script: |
-              sonarscanner begin /k:devops-training /d:sonar-login=$(SONAR_LOGIN)
+              dotnet sonarscanner begin /k:devops-training /d:sonar.login=$SONAR_LOGIN /o:hannguyen-dev
               dotnet build
               dotnet test
-              sonarscanner end /d:sonar-login=$(SONAR_LOGIN)
+              dotnet sonarscanner end /d:sonar-login=$SONAR_LOGIN
+              env:
+                SONAR_LOGIN: $(SONAR_LOGIN)
   - stage: pack
     jobs:
       - job:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: docker image build -f 3_devops/dockerfile -t hannguyendev/devops:$(BUILD_NAME)
-          - script: docker login -username $(DOCKER_USER) --password $(DOCKER_TOKEN)
-          - script: docker push hannguyendev/devops:$(BUILD_NAME)
+          - script: docker image build -f 3_devops/dockerfile -t fredbelotte/devops:$BUILD_NAME
+            env:
+              BUILD_NAME: $(Build.DefinitionName)
+          - script: docker login --username $DOCKER_USER --password $DOCKER_TOKEN
+            env:
+              DOCKER_USER: $(DOCKER_USER)
+              DOCKER_TOKEN: $(DOCKER_TOKEN)
+          - script: docker image push fredbelotte/devops:$BUILD_NAME
+            env:
+              BUILD_NAME: $(Build.DefinitionName)
