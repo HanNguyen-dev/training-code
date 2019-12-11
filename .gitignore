@@ -5,3 +5,5 @@
 # vagrant
 **/.vagrant
 
+# TestResults
+**/TestResults
