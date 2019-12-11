@@ -1,4 +1,4 @@
-name: $(date:yyyyMMdd)$(rev:.rr) #20191209.00
+name: $(date:yyyyMMdd)$(rev:.rr)
 
 trigger:
   - master
@@ -25,21 +25,23 @@ stages:
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: cobertura
-              summaryFileLocation: '**/TestResults/coverage.cobertura.xml'
+              summaryFileLocation: '**/coverage.cobertura.xml'
   - stage: analyze
     jobs:
       - job:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: dotnet tool install --global dotnet-sonarscanner
+          - task: DotnetGlobalToolInstaller@0
+            inputs:
+              name: 'dotnet-sonarscanner'
           - script: |
-              dotnet sonarscanner begin /k:devops-training /d:sonar.login=$SONAR_LOGIN /o:hannguyen-dev
-              dotnet build
-              dotnet test
-              dotnet sonarscanner end /d:sonar-login=$SONAR_LOGIN
-              env:
-                SONAR_LOGIN: $(SONAR_LOGIN)
+              dotnet sonarscanner begin /k:devops-training /d:sonar.login=$SONAR_TOKEN /o:1910-oct21-dotnet
+              dotnet build 3_devops/Devops.sln
+              dotnet test 3_devops/Devops.sln
+              dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+            env:
+              SONAR_TOKEN: $(SONAR_LOGIN)
   - stage: pack
     jobs:
       - job:
@@ -51,8 +53,8 @@ stages:
               BUILD_NAME: $(Build.DefinitionName)
           - script: docker login --username $DOCKER_USER --password $DOCKER_TOKEN
             env:
-              DOCKER_USER: $(DOCKER_USER)
-              DOCKER_TOKEN: $(DOCKER_TOKEN)
+              DOCKER_TOKEN: $(docker.token)
+              DOCKER_USER: $(docker.user)
           - script: docker image push fredbelotte/devops:$BUILD_NAME
             env:
               BUILD_NAME: $(Build.DefinitionName)
